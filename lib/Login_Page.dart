@@ -71,6 +71,8 @@ void loginUser(){
                     hintText: 'Password',
                     border: OutlineInputBorder(),
                   ),
+
+
                 ),
                ElevatedButton(
                   onPressed: loginUser,
@@ -90,7 +92,7 @@ void loginUser(){
 
                 GestureDetector(
                   onDoubleTap: () {
-                    print("DoubleTap");
+                    print("DoubleTap pressing");
                   },
                   onTap: () {
                     print('onTap');
