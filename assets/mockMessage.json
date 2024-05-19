@@ -1,0 +1,55 @@
+[
+    {
+        "author": {
+            "username": "nivetha thomas"
+        },
+        "createdAt": 1124341334642,
+        "id": "1001",
+        "text": "Hii"
+    },
+    {
+        "author": {
+            "username": "nivetha thomas"
+        },
+        "createdAt": 1124341334642,
+        "id": "1001",
+        "text": "Heyy hii"
+    },
+    {
+        "author": {
+            "username": "nivetha thomas"
+        },
+        "createdAt": 1124341334642,
+        "id": "1001",
+        "text": "Heyy good morning! how are you"
+    },
+    {
+    "author": {
+        "username": "johnwesly"
+    },
+    "createdAt": 1465265656334,
+    "id": "1002",
+    "text": "Heyy good morning you too! I am Fine how are you",
+    "imageUrl": "https://tse2.mm.bing.net/th?id=OIP.lW161WzPXUhDWJm4o-HbmAHaHa&pid=Api&P=0&h=180"
+
+    },
+
+    {
+        "author": {
+            "username": "nivetha thomas"
+        },
+        "createdAt": 1465265656334,
+        "id": "1002",
+        "text": "I am Fine ! ",
+        "imageUrl": "https://tse2.mm.bing.net/th?id=OIP.kMMeg2OrwK5v6CoDlEk2vQHaHT&pid=Api&P=0&h=180"
+    
+    },
+    {
+        "author": {
+            "username": "johnwesly"
+        },
+        "createdAt": 1465265656334,
+        "id": "1002",
+        "text": "cool"
+    }
+]
