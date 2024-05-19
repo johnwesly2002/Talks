@@ -2,7 +2,7 @@
 Flutter_App for Pratice the flutter concepts
 # helloworld
 
-A new Flutter project.
+A new Flutter project called as Talks.
 
 ## Getting Started
 
