@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "623858857074",
+    "project_id": "talks-d3253",
+    "storage_bucket": "talks-d3253.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623858857074:android:7ef96f884a5320dfbabeeb",
+        "android_client_info": {
+          "package_name": "com.example.helloworld"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDOpnY0saVC5z7uXA-v1O5yKV0fmr8qUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
