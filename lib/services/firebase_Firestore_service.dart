@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:Talks/modals/chatUserModal.dart';
 import 'package:Talks/modals/messagesModal.dart';
 import 'package:Talks/services/firebase_StorageService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -71,4 +72,13 @@ class FirebaseFirestoreService {
   static Future<void> UserRegistration(
           Map<String, dynamic> data, String uid) async =>
       await firestore.collection('users').doc(uid).set(data);
+  static Future<List<ChatUserModal>> UserSearch(String name) async {
+    final UserList = await FirebaseFirestore.instance
+        .collection('users')
+        .where("name", isGreaterThanOrEqualTo: name)
+        .get();
+    return UserList.docs
+        .map((doc) => ChatUserModal.fromJson(doc.data()))
+        .toList();
+  }
 }

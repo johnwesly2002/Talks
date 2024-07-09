@@ -89,8 +89,7 @@ class _ChatInputState extends State<ChatInput> {
                   style: TextStyle(color: themeColor.chatInputColor),
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 10), // Adjust padding inside TextField
+                        vertical: 10, horizontal: 10),
                     hintText: 'Type your message',
                     hintStyle: TextStyle(
                         fontSize: 15, color: themeColor.chatInputColor),
