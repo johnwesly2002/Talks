@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:Talks/modals/signupUserModal.dart';
+import 'package:Talks/widgets/emptyChatWidget.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -95,15 +96,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ],
           ),
           if (_isLoading)
-            Center(
-              child: Container(
-                child: Lottie.asset(
-                  'assets/TalksLoadingAnimation.json',
-                  width: 350,
-                  height: 350,
-                ),
-              ),
-            ),
+            // Center(
+            //   child: Container(
+            //     child: Lottie.asset(
+            //       'assets/TalksLoadingAnimation.json',
+            //       width: 350,
+            //       height: 350,
+            //     ),
+            //   ),
+            // ),
+            const EmptyWidget(
+                icon: 'assets/TalksLoadingAnimation.json', text: 'Loading...')
         ],
       ),
       bottomNavigationBar: BottomAppBar(

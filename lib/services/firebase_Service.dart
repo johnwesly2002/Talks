@@ -1,5 +1,6 @@
 import "package:Talks/modals/chatUserModal.dart";
 import "package:Talks/modals/messagesModal.dart";
+import "package:Talks/services/firebase_Firestore_service.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 class FirebaseProvider extends ChangeNotifier {
   ScrollController scrollController = ScrollController();
   List<ChatUserModal> users = [];
+  List<ChatUserModal> searchUsers = [];
   ChatUserModal? user;
   List<Messages> messages = [];
   List<ChatUserModal> getAllUsers() {
@@ -68,4 +70,9 @@ class FirebaseProvider extends ChangeNotifier {
           scrollController.jumpTo(scrollController.position.maxScrollExtent);
         }
       });
+
+  Future<void> SearchUser(String name) async {
+    searchUsers = await FirebaseFirestoreService.UserSearch(name);
+    notifyListeners();
+  }
 }

@@ -5,7 +5,7 @@ import 'package:lottie/lottie.dart';
 class EmptyWidget extends StatelessWidget {
   const EmptyWidget({super.key, required this.icon, required this.text});
 
-  final IconData icon;
+  final String icon;
   final String text;
 
   @override
@@ -15,7 +15,7 @@ class EmptyWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Lottie.asset(
-              'assets/EmptyChat.json',
+              icon,
               width: 200,
               height: 200,
             ),

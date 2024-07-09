@@ -20,7 +20,8 @@ class _chatMessagesState extends State<chatMessages> {
     return Consumer<FirebaseProvider>(
         builder: (context, value, child) => value.messages.isEmpty
             ? const Expanded(
-                child: EmptyWidget(icon: Icons.waving_hand, text: 'Say Hello!'),
+                child: EmptyWidget(
+                    icon: 'assets/EmptyChat.json', text: 'Say Hello!'),
               )
             : Expanded(
                 child: ListView.builder(

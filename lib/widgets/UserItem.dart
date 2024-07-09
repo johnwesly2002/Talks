@@ -1,5 +1,6 @@
 import 'package:Talks/Chat_Page.dart';
 import 'package:Talks/modals/chatUserModal.dart';
+import 'package:Talks/utils/textFeilds_styles.dart';
 import 'package:Talks/utils/themeColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -36,20 +37,12 @@ class _UserItemState extends State<UserItem> {
           ]),
           title: Text(
             widget.user.name,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: ThemTextStyles.homePageUsersText,
           ),
           subtitle: Text(
             'Last Seen: ${timeago.format(widget.user.lastActive)}',
             maxLines: 2,
-            style: TextStyle(
-              color: themeColor.chatInputColor,
-              fontSize: 12,
-              overflow: TextOverflow.ellipsis,
-            ),
+            style: ThemTextStyles.lastSeenText,
           ),
         ),
       );
