@@ -6,8 +6,8 @@ class ThemTextStyles {
   static TextStyle LoginTextStyles =
       GoogleFonts.poppins(textStyle: TextStyle(color: Colors.blueGrey));
   static TextStyle HeadingStyles = GoogleFonts.poppins(
-      textStyle:
-          const TextStyle(color: Colors.black, fontWeight: FontWeight.w500));
+      textStyle: const TextStyle(
+          color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20));
   static TextStyle SingupAccountHeadingStyles = GoogleFonts.poppins(
       textStyle: TextStyle(
           fontWeight: FontWeight.w400, color: themeColor.primaryColor));
@@ -31,11 +31,30 @@ class ThemTextStyles {
           fontWeight: FontWeight.w500, fontSize: 20, color: Colors.black));
   static TextStyle MenuOptionsText = GoogleFonts.poppins(
       textStyle: TextStyle(
-          fontWeight: FontWeight.w500, fontSize: 15, color: Colors.black));
+          fontWeight: FontWeight.w500, fontSize: 12, color: Colors.black));
   static TextStyle homePageUsersText = GoogleFonts.poppins(
       textStyle: TextStyle(
           fontWeight: FontWeight.w600, fontSize: 16, color: Colors.black));
   static TextStyle lastSeenText = GoogleFonts.poppins(
       textStyle: TextStyle(
           fontWeight: FontWeight.w300, fontSize: 12, color: themeColor.grey));
+  static TextStyle ProfileNameText = GoogleFonts.poppins(
+      textStyle: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 20,
+          color: themeColor.attachiconcolor));
+  static TextStyle ProfileEditText = GoogleFonts.poppins(
+      textStyle: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 10,
+          color: themeColor.chatInputIconsColor));
+  static TextStyle ProfileEmailText = GoogleFonts.poppins(
+      textStyle: TextStyle(
+          fontWeight: FontWeight.w300, fontSize: 11, color: themeColor.grey));
+  static TextStyle ProfileSaveText = GoogleFonts.poppins(
+      textStyle: TextStyle(
+          fontWeight: FontWeight.w500, color: themeColor.chatInputIconsColor));
+  static TextStyle ButtonsTextStyle = GoogleFonts.poppins(
+      textStyle: TextStyle(
+          fontWeight: FontWeight.w300, fontSize: 16, color: Colors.black));
 }

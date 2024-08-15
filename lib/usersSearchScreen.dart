@@ -1,4 +1,3 @@
-import 'package:Talks/modals/chatUserModal.dart';
 import 'package:Talks/services/firebase_Service.dart';
 import 'package:Talks/utils/textFeilds_styles.dart';
 import 'package:Talks/widgets/UserItem.dart';

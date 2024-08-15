@@ -1,23 +1,12 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, unnecessary_string_interpolations, use_build_context_synchronously, avoid_unnecessary_containers
-
 import "package:Talks/database/database.dart";
-import "package:Talks/modals/userModal.dart";
-import "package:Talks/services/auth_Service.dart";
 import "package:Talks/services/firebase_Firestore_service.dart";
 import "package:Talks/utils/texts.dart";
-import "package:Talks/utils/themeColor.dart";
 import "package:firebase_auth/firebase_auth.dart";
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
-import "package:Talks/Chat_Page.dart";
 import "package:Talks/utils/spaces.dart";
 import "package:Talks/utils/textFeilds_styles.dart";
 import "package:Talks/widgets/LoginTextField.dart";
-import "package:flutter/widgets.dart";
 import "package:google_fonts/google_fonts.dart";
-import "package:provider/provider.dart";
-import "package:social_media_buttons/social_media_button.dart";
-import 'package:url_launcher/url_launcher.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {

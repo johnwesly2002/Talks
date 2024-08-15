@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:Talks/modals/signupUserModal.dart';
 import 'package:Talks/widgets/emptyChatWidget.dart';
@@ -8,11 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:Talks/modals/chatUserModal.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:Talks/utils/themeColor.dart';
 import 'package:Talks/utils/textFeilds_styles.dart';
-import 'package:lottie/lottie.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override

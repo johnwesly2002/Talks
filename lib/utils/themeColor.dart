@@ -7,5 +7,5 @@ class themeColor {
   static Color TextFieldColor = Colors.grey.withOpacity(.2);
   static Color StatusColor = Colors.green;
   static Color attachiconcolor = Colors.black;
-  static Color grey = const Color.fromARGB(255, 97, 95, 95);
+  static Color grey = Colors.grey;
 }

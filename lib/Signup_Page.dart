@@ -1,14 +1,11 @@
 import 'package:Talks/database/database.dart';
 import 'package:Talks/modals/userModal.dart';
-import 'package:Talks/services/auth_Service.dart';
 import 'package:Talks/utils/spaces.dart';
 import 'package:Talks/utils/textFeilds_styles.dart';
 import 'package:Talks/widgets/LoginTextField.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:Talks/utils/texts.dart';
 
 class signupPage extends StatefulWidget {
@@ -160,7 +157,6 @@ class _signupPageState extends State<signupPage> {
   }
 
   Widget _SignupFooter() {
-    var headingText;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
