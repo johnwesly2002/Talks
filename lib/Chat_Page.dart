@@ -1,97 +1,112 @@
-import "dart:convert";
-
 import "package:Talks/modals/chatMessageEntity.dart";
-import "package:Talks/modals/imagesModal.dart";
-import "package:Talks/repo/image_respository.dart";
-import "package:Talks/services/auth_Service.dart";
-import "package:flutter/cupertino.dart";
+import "package:Talks/services/firebase_Firestore_service.dart";
+import "package:Talks/services/firebase_Service.dart";
+import "package:Talks/widgets/chatMessages.dart";
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
-import "package:flutter/widgets.dart";
-import "package:Talks/widgets/ChatBubble.dart";
 import "package:Talks/widgets/ChatInput.dart";
-import 'package:http/http.dart' as http;
 import "package:provider/provider.dart";
 
 class ChatPage extends StatefulWidget {
   ChatPage({
     super.key,
+    required this.userId,
   });
+  final String userId;
 
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   List<ChatMessageEntity> _messages = [];
-
-  _loadMessages() async {
-    final response = await rootBundle.loadString('assets/mockMessage.json');
-    final List<dynamic> decodedList = jsonDecode(response) as List;
-    final List<ChatMessageEntity> _chatMessages = decodedList.map((listItem) {
-      return ChatMessageEntity.fromJson(listItem);
-    }).toList();
-    setState(() {
-      _messages = _chatMessages;
-    });
-    print(response);
-  }
 
   messageSent(ChatMessageEntity entity) {
     _messages.add(entity);
-    setState(() {});
   }
 
-  final ImageRepository _imageRepo = ImageRepository();
-
   void initState() {
-    _loadMessages();
+    Provider.of<FirebaseProvider>(context, listen: false)
+      ..getUserById(widget.userId)
+      ..getUserMessages(widget.userId);
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.addObserver(this);
+    super.dispose();
+  }
+
+  void didChangeAppLifeCycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        FirebaseFirestoreService.updateUserInformation(
+          {'lastActive': DateTime.now(), 'isOnline': true},
+        );
+        break;
+      case AppLifecycleState.detached:
+        FirebaseFirestoreService.updateUserInformation(
+          {'isOnline': true},
+        );
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.hidden:
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final username = context.watch<AuthService>().getUsername();
     return Scaffold(
-        appBar: AppBar(
-          title: Center(
-            child: Text('$username'),
-          ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  context.read<AuthService>().UpdateUserName("wesly");
-                },
-                icon: Icon(Icons.update)),
-            IconButton(
-                onPressed: () {
-                  context.read<AuthService>().logoutUser();
-                  Navigator.pushReplacementNamed(context, '/');
-                  print("Logout button Pressed");
-                },
-                icon: Icon(Icons.logout))
-          ],
-        ),
+        appBar: _buildChatAppBar(),
         body: Column(
           children: [
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: ListView.builder(
-                  itemCount: _messages.length,
-                  itemBuilder: (context, index) {
-                    return ChatBubble(
-                        alignment: _messages[index].author.userName ==
-                                context.read<AuthService>().getUsername()
-                            ? Alignment.centerRight
-                            : Alignment.centerLeft,
-                        entity: _messages[index]);
-                  }),
+            chatMessages(
+              userId: widget.userId,
             ),
             ChatInput(
               onSubmit: messageSent,
+              receiverId: widget.userId,
             ),
           ],
         ));
   }
+
+  AppBar _buildChatAppBar() => AppBar(
+      backgroundColor: Colors.transparent,
+      title: Consumer<FirebaseProvider>(
+        builder: (context, value, child) => value.user != null
+            ? Row(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(value.user!.image),
+                    radius: 20,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        value.user!.name,
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(value.user!.isOnline ? 'online' : 'offline',
+                          style: TextStyle(
+                            color: value.user!.isOnline
+                                ? Colors.green
+                                : Colors.red,
+                            fontSize: 14,
+                          ))
+                    ],
+                  )
+                ],
+              )
+            : const SizedBox(),
+      ));
 }
