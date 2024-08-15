@@ -2,7 +2,6 @@ import 'package:Talks/modals/messagesModal.dart';
 import 'package:Talks/services/firebase_Service.dart';
 import 'package:Talks/widgets/ChatBubble.dart';
 import 'package:Talks/widgets/emptyChatWidget.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';

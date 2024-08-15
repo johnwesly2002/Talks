@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+// ignore_for_file: non_constant_identifier_names
 
 class HeadingText {
   static String LoginHeading = 'Let\'s you sign in!';

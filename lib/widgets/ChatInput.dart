@@ -1,19 +1,10 @@
-import "dart:io";
 import "dart:typed_data";
 
 import "package:Talks/modals/chatMessageEntity.dart";
-import "package:Talks/modals/chatUserModal.dart";
-import "package:Talks/modals/messagesModal.dart";
 import "package:Talks/services/MediaService.dart";
-import "package:Talks/services/auth_Service.dart";
 import "package:Talks/services/firebase_Firestore_service.dart";
-import "package:Talks/widgets/imagePicker.dart";
-import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 import "package:Talks/utils/themeColor.dart";
-import "package:provider/provider.dart";
 
 class ChatInput extends StatefulWidget {
   final Function(ChatMessageEntity) onSubmit;
@@ -24,13 +15,10 @@ class ChatInput extends StatefulWidget {
 }
 
 class _ChatInputState extends State<ChatInput> {
-  String _selectedImage = '';
   final chatMessageController = TextEditingController();
   Uint8List? file;
   void ImagePicked(String Image) {
-    setState(() {
-      _selectedImage = Image;
-    });
+    setState(() {});
     Navigator.of(context).pop();
   }
 
@@ -65,7 +53,7 @@ class _ChatInputState extends State<ChatInput> {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 229, 227, 227),
+          color: themeColor.chatInputColor,
           borderRadius: BorderRadius.circular(30.0),
         ),
         height: 60,
@@ -75,7 +63,7 @@ class _ChatInputState extends State<ChatInput> {
             IconButton(
               onPressed: _sendImage,
               icon: Icon(Icons.attach_file_rounded),
-              color: themeColor.attachiconcolor,
+              color: themeColor.chatInputIconsColor,
             ),
             Expanded(
               child: Container(
@@ -86,13 +74,13 @@ class _ChatInputState extends State<ChatInput> {
                   maxLines: 1,
                   controller: chatMessageController,
                   textCapitalization: TextCapitalization.sentences,
-                  style: TextStyle(color: themeColor.chatInputColor),
+                  style: TextStyle(color: themeColor.chatInputIconsColor),
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 10),
                     hintText: 'Type your message',
                     hintStyle: TextStyle(
-                        fontSize: 15, color: themeColor.chatInputColor),
+                        fontSize: 15, color: themeColor.chatInputIconsColor),
                     border: InputBorder.none,
                   ),
                 ),
@@ -103,9 +91,9 @@ class _ChatInputState extends State<ChatInput> {
               child: IconButton(
                 onPressed: () => _sendText(context),
                 icon: const Icon(Icons.send),
-                color: themeColor.chatInputIconsColor,
+                color: Colors.white,
                 style: IconButton.styleFrom(
-                  backgroundColor: Colors.purple,
+                  backgroundColor: Colors.deepPurple,
                   shape: const CircleBorder(),
                   padding: const EdgeInsets.all(8.0),
                 ),
