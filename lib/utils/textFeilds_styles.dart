@@ -56,5 +56,8 @@ class ThemTextStyles {
           fontWeight: FontWeight.w500, color: themeColor.chatInputIconsColor));
   static TextStyle ButtonsTextStyle = GoogleFonts.poppins(
       textStyle: TextStyle(
-          fontWeight: FontWeight.w300, fontSize: 16, color: Colors.black));
+          fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black));
+  static TextStyle WebEmptyChat = GoogleFonts.poppins(
+      textStyle: const TextStyle(
+          color: Colors.grey, fontWeight: FontWeight.w500, fontSize: 20));
 }

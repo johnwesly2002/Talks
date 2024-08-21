@@ -24,15 +24,13 @@ class _ChatInputState extends State<ChatInput> {
 
   Future<void> _sendText(BuildContext context) async {
     if (chatMessageController.text.isNotEmpty) {
-      print("before firebase");
-      await FirebaseFirestoreService.addTextMessage(
-          receiverId: widget.receiverId, content: chatMessageController.text);
-      print("after firebase");
-
+      final messageText = chatMessageController.text;
       chatMessageController.clear();
-      FocusScope.of(context).unfocus();
+
+      await FirebaseFirestoreService.addTextMessage(
+          receiverId: widget.receiverId, content: messageText);
     }
-    FocusScope.of(context).unfocus();
+    // FocusScope.of(context).unfocus();
   }
 
   Future<void> _sendImage() async {
@@ -53,7 +51,7 @@ class _ChatInputState extends State<ChatInput> {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: themeColor.chatInputColor,
+          color: Colors.grey.shade200,
           borderRadius: BorderRadius.circular(30.0),
         ),
         height: 60,
@@ -63,7 +61,7 @@ class _ChatInputState extends State<ChatInput> {
             IconButton(
               onPressed: _sendImage,
               icon: Icon(Icons.attach_file_rounded),
-              color: themeColor.chatInputIconsColor,
+              color: themeColor.chatInputText,
             ),
             Expanded(
               child: Container(
@@ -74,13 +72,13 @@ class _ChatInputState extends State<ChatInput> {
                   maxLines: 1,
                   controller: chatMessageController,
                   textCapitalization: TextCapitalization.sentences,
-                  style: TextStyle(color: themeColor.chatInputIconsColor),
+                  style: TextStyle(color: themeColor.attachiconcolor),
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 10),
                     hintText: 'Type your message',
                     hintStyle: TextStyle(
-                        fontSize: 15, color: themeColor.chatInputIconsColor),
+                        fontSize: 15, color: themeColor.chatInputText),
                     border: InputBorder.none,
                   ),
                 ),

@@ -15,44 +15,7 @@ class FirebaseProvider extends ChangeNotifier {
 
   FirebaseProvider() {
     // Initialize listeners or perform initial setup here
-    startListeningForMessages();
-  }
-
-  void startListeningForMessages() {
-    final currentUserUid = FirebaseAuth.instance.currentUser!.uid;
-
-    // Listen for changes in the chat collection of the current user
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(currentUserUid)
-        .collection('chat')
-        .snapshots()
-        .listen((querySnapshot) async {
-      users.clear(); // Clear existing list to avoid duplicates
-
-      // Iterate through each conversation (document) in the chat collection
-      for (var doc in querySnapshot.docs) {
-        final otherUserId = doc.id;
-
-        // Check if there are messages exchanged between current user and this user
-        bool conversationExists =
-            await checkConversationExists(currentUserUid, otherUserId);
-
-        if (conversationExists) {
-          // Fetch user details and add to users list
-          FirebaseFirestore.instance
-              .collection('users')
-              .doc(otherUserId)
-              .get()
-              .then((userDoc) {
-            if (userDoc.exists) {
-              users.add(ChatUserModal.fromJson(userDoc.data()!));
-            }
-          });
-        }
-        notifyListeners();
-      }
-    });
+    // startListeningForMessages();
   }
 
   static Future<ChatUserModal> getCurrentUser(String currentUserId) async {
@@ -64,30 +27,79 @@ class FirebaseProvider extends ChangeNotifier {
     return ChatUserModal.fromJson(userDoc.data() as Map<String, dynamic>);
   }
 
-  Future<List<ChatUserModal>> getAllUsers(String currentUserId) async {
+  Future<void> getAllUsers(String currentUserId) async {
     try {
-      final QuerySnapshot usersSnapshot =
-          await FirebaseFirestore.instance.collection('users').get();
-      users.clear();
-      // Iterate through each user document
-      for (var userDoc in usersSnapshot.docs) {
-        final userData = userDoc.data() as Map<String, dynamic>;
-        final userId = userDoc.id;
+      final Map<String, ChatUserModal> usersMap = {};
 
-        // Check if there are messages exchanged between current user and this user
-        final conversationExists =
-            await checkConversationExists(currentUserId, userId);
+      // Step 1: Fetch users who have a conversation with the current user
+      FirebaseFirestore.instance
+          .collection('users')
+          .snapshots()
+          .listen((usersSnapshot) async {
+        for (var userDoc in usersSnapshot.docs) {
+          final userData = userDoc.data();
+          final userId = userDoc.id;
 
-        if (conversationExists) {
-          // Add user to the list if a conversation exists
-          users.add(ChatUserModal.fromJson(userData));
+          if (userId != currentUserId) {
+            // Check if there are messages exchanged between the current user and this user
+            final conversationExists =
+                await checkConversationExists(currentUserId, userId);
+
+            if (conversationExists) {
+              // Add or update user in the map
+              usersMap[userId] = ChatUserModal.fromJson(userData);
+
+              // Step 2: Listen for changes in the specific conversation
+              FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(currentUserId)
+                  .collection('chat')
+                  .doc(userId)
+                  .collection('messages')
+                  .snapshots()
+                  .listen((messageSnapshot) async {
+                if (messageSnapshot.docs.isNotEmpty) {
+                  // Check if the user already exists in the map before notifying listeners
+                  if (usersMap.containsKey(userId)) {
+                    notifyListeners();
+                  } else {
+                    final userDoc = await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(userId)
+                        .get();
+                    final userData = userDoc.data();
+                    usersMap[userId] = ChatUserModal.fromJson(userData!);
+                    notifyListeners();
+                  }
+                }
+              });
+
+              // Step 3: Listen for online status changes in real-time
+              FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(userId)
+                  .snapshots()
+                  .listen((userSnapshot) {
+                if (userSnapshot.exists) {
+                  final updatedUserData = userSnapshot.data();
+                  if (updatedUserData != null) {
+                    // Update only the online status and other details without duplicating
+                    usersMap[userId] = ChatUserModal.fromJson(updatedUserData);
+                    notifyListeners();
+                  }
+                }
+              });
+            }
+          }
         }
-      }
-      notifyListeners();
-      return users;
+
+        // Step 4: After processing all users, update the list from the map
+        users.clear();
+        users.addAll(usersMap.values.toList());
+        notifyListeners();
+      });
     } catch (error) {
       print("Error in fetching users: $error");
-      return [];
     }
   }
 
@@ -112,7 +124,7 @@ class FirebaseProvider extends ChangeNotifier {
     FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
-        .snapshots(includeMetadataChanges: true)
+        .snapshots()
         .listen((user) {
       this.user = ChatUserModal.fromJson(user.data()!);
       notifyListeners();
@@ -130,12 +142,11 @@ class FirebaseProvider extends ChangeNotifier {
         .orderBy('sentTime', descending: false)
         .snapshots(includeMetadataChanges: true)
         .listen((messagesSnapshot) {
-      messages.clear();
-      this.messages = messagesSnapshot.docs
+      messages = messagesSnapshot.docs
           .map((doc) => Messages.fromJson(doc.data()))
           .toList();
-      notifyListeners();
       chatScrollDown();
+      notifyListeners();
     });
     return messages;
   }
@@ -149,5 +160,67 @@ class FirebaseProvider extends ChangeNotifier {
   Future<void> SearchUser(String name) async {
     searchUsers = await FirebaseFirestoreService.UserSearch(name);
     notifyListeners();
+  }
+
+  //Get the unreadMessages
+  Future<int> getUnreadMessagesCount(
+      String currentUserId, String otherUserId) async {
+    try {
+      final QuerySnapshot unreadMessagesSnapshot = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(currentUserId)
+          .collection('chat')
+          .doc(otherUserId)
+          .collection('messages')
+          .where('isRead', isEqualTo: false)
+          .get();
+      print(
+          "getting unread messages count: ${unreadMessagesSnapshot.docs.length}");
+      return unreadMessagesSnapshot.docs.length;
+    } catch (error) {
+      print("Error getting unread messages count: $error");
+      return 0;
+    }
+  }
+
+  Stream<int> getUnreadMessageCountStream(
+      String currentUserId, String otherUserId) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUserId)
+        .collection('chat')
+        .doc(otherUserId)
+        .collection('messages')
+        .where('isRead', isEqualTo: false)
+        .where('senderId', isEqualTo: otherUserId)
+        .snapshots()
+        .map((snapshot) {
+      print("Snapshot length for $otherUserId: ${snapshot.docs.length}");
+      for (var doc in snapshot.docs) {
+        print("Message ID: ${doc.id}, isRead: ${doc['isRead']}");
+      }
+      return snapshot.docs.length;
+    });
+  }
+
+  Future<void> markMessagesAsRead(
+      String CurrentUserId, String otherUserId) async {
+    final batch = FirebaseFirestore.instance.batch();
+    final messagesRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(CurrentUserId)
+        .collection('chat')
+        .doc(otherUserId)
+        .collection('messages')
+        .where('isRead', isEqualTo: false)
+        .where('senderId', isEqualTo: otherUserId);
+
+    final snapshot = await messagesRef.get();
+
+    for (var doc in snapshot.docs) {
+      batch.update(doc.reference, {'isRead': true});
+    }
+    await batch.commit();
   }
 }

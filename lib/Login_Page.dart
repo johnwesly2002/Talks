@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage>
           email: userNameController.text.trim(),
           password: passwordController.text.trim());
       await FirebaseFirestoreService.updateUserInformation(
-        {'lastActive': DateTime.now()},
+        {'lastActive': DateTime.now(), 'isOnline': true},
       );
       if (response.user != null) {
         Fluttertoast.showToast(

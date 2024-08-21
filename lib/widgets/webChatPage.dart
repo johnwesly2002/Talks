@@ -7,39 +7,60 @@ import "package:flutter/material.dart";
 import "package:Talks/widgets/ChatInput.dart";
 import "package:provider/provider.dart";
 
-class ChatPage extends StatefulWidget {
-  ChatPage({
+class webChatPage extends StatefulWidget {
+  webChatPage({
     super.key,
     required this.userId,
   });
   final String userId;
 
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  State<webChatPage> createState() => _webChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
+class _webChatPageState extends State<webChatPage> with WidgetsBindingObserver {
   List<ChatMessageEntity> _messages = [];
-  late FirebaseProvider _firebaseProvider;
   String CurrentUserId = FirebaseAuth.instance.currentUser!.uid;
   messageSent(ChatMessageEntity entity) {
     _messages.add(entity);
-    print("addMessages${_messages}");
   }
 
+  // void initState() {
+  //   Provider.of<FirebaseProvider>(context, listen: false)
+  //     ..getUserById(widget.userId)
+  //     ..getUserMessages(widget.userId);
+  //   WidgetsBinding.instance.addObserver(this);
+  //   super.initState();
+  // }
+
+  @override
   void initState() {
-    _firebaseProvider = Provider.of<FirebaseProvider>(context, listen: false);
-    _firebaseProvider.getUserById(widget.userId);
-    _firebaseProvider.getUserMessages(widget.userId);
-    _firebaseProvider.markMessagesAsRead(CurrentUserId, widget.userId);
-    WidgetsBinding.instance.addObserver(this);
     super.initState();
+    _loadMessagesAndUser();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.addObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(webChatPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.userId != widget.userId) {
+      _loadMessagesAndUser();
+    }
+  }
+
+  void _loadMessagesAndUser() {
+    Provider.of<FirebaseProvider>(context, listen: false)
+      ..getUserById(widget.userId)
+      ..getUserMessages(widget.userId);
+    Provider.of<FirebaseProvider>(context)
+        .markMessagesAsRead(CurrentUserId, widget.userId);
+    setState(() {});
   }
 
   void didChangeAppLifeCycleState(AppLifecycleState state) {
@@ -80,6 +101,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
 
   AppBar _buildChatAppBar() => AppBar(
       backgroundColor: Colors.transparent,
+      automaticallyImplyLeading: false,
       title: Consumer<FirebaseProvider>(
         builder: (context, value, child) => value.user != null
             ? Row(

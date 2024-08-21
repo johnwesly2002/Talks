@@ -5,6 +5,7 @@ import 'package:Talks/homePage.dart';
 import 'package:Talks/onBoardingScreen.dart';
 import 'package:Talks/services/Themeprovider.dart';
 import 'package:Talks/services/auth_Service.dart';
+import 'package:Talks/services/firebase_Firestore_service.dart';
 import 'package:Talks/services/firebase_Service.dart';
 import 'package:Talks/utils/themeColor.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -60,6 +61,9 @@ class _ChatAppState extends State<ChatApp> {
     AuthService authService = Provider.of<AuthService>(context, listen: false);
     setState(() {
       _isLoggedIn = authService.isLoggedIn();
+      FirebaseFirestoreService.updateUserInformation(
+        {'isOnline': true},
+      );
     });
   }
 

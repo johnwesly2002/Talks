@@ -8,4 +8,5 @@ class themeColor {
   static Color StatusColor = Colors.green;
   static Color attachiconcolor = Colors.black;
   static Color grey = Colors.grey;
+  static Color chatInputText = Colors.grey;
 }

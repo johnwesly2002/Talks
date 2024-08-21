@@ -8,42 +8,71 @@ class CustomButton extends StatelessWidget {
     required this.leftIcon,
     required this.buttonText,
     required this.onPressed,
+    required this.IconColor,
   });
   final leftIcon;
   final buttonText;
   final onPressed;
+  final IconColor;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.9,
-        height: 50,
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Row(
-            children: [
-              Icon(
-                leftIcon,
-                size: 25,
+      child: Column(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Row(
+                children: [
+                  Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                        color: IconColor.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Icon(
+                      leftIcon,
+                      size: 20,
+                      color: IconColor,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: VerticalDivider(
+                      width: 20,
+                      thickness: 1,
+                      color: Colors.grey.withOpacity(0.2),
+                    ),
+                  ),
+                  Text(
+                    buttonText,
+                    style: ThemTextStyles.ButtonsTextStyle,
+                  ),
+                  const Spacer(), // This will push the second icon to the right
+                  const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 23,
+                  ),
+                ],
               ),
-              const SizedBox(width: 4),
-              Text(
-                buttonText,
-                style: ThemTextStyles.ButtonsTextStyle,
-              ),
-              const Spacer(), // This will push the second icon to the right
-              const Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 23,
-              ),
-            ],
+            ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: Divider(
+              color: Colors.grey.withOpacity(0.3), // Light gray color
+              thickness: 1, // Thin line
+              height: 20, // Space before the next button
+            ),
+          ),
+        ],
       ),
     );
   }
