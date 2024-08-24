@@ -29,8 +29,8 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
 
   void initState() {
     _firebaseProvider = Provider.of<FirebaseProvider>(context, listen: false);
-    _firebaseProvider.getUserById(widget.userId);
     _firebaseProvider.getUserMessages(widget.userId);
+    _firebaseProvider.getUserById(widget.userId);
     _firebaseProvider.markMessagesAsRead(CurrentUserId, widget.userId);
     WidgetsBinding.instance.addObserver(this);
     super.initState();
@@ -52,7 +52,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
         break;
       case AppLifecycleState.detached:
         FirebaseFirestoreService.updateUserInformation(
-          {'isOnline': true},
+          {'isOnline': false},
         );
         break;
       case AppLifecycleState.inactive:

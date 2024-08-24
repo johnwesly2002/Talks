@@ -77,12 +77,27 @@ class ChatBubble extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-          child: Text(
-            timeago.format(entity.sentTime),
-            style: TextStyle(
-              color: Colors.grey.shade500,
-              fontSize: 10,
-            ),
+          child: Row(
+            mainAxisAlignment:
+                CurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              Text(
+                timeago.format(entity.sentTime),
+                style: TextStyle(
+                  color: Colors.grey.shade500,
+                  fontSize: 10,
+                ),
+              ),
+              if (CurrentUser) // Show check icon only for receiver
+                SizedBox(width: 5),
+              CurrentUser
+                  ? Icon(
+                      entity.isRead ? Icons.done_all : Icons.check,
+                      color: entity.isRead ? Colors.blue : Colors.grey,
+                      size: 18,
+                    )
+                  : const SizedBox(),
+            ],
           ),
         ),
       ],

@@ -205,22 +205,59 @@ class FirebaseProvider extends ChangeNotifier {
   }
 
   Future<void> markMessagesAsRead(
-      String CurrentUserId, String otherUserId) async {
+      String currentUserId, String otherUserId) async {
     final batch = FirebaseFirestore.instance.batch();
-    final messagesRef = FirebaseFirestore.instance
+
+    final currentUserMessagesRef = FirebaseFirestore.instance
         .collection('users')
-        .doc(CurrentUserId)
+        .doc(currentUserId)
         .collection('chat')
         .doc(otherUserId)
         .collection('messages')
         .where('isRead', isEqualTo: false)
         .where('senderId', isEqualTo: otherUserId);
 
-    final snapshot = await messagesRef.get();
+    final currentUserSnapshot = await currentUserMessagesRef.get();
 
-    for (var doc in snapshot.docs) {
+    for (var doc in currentUserSnapshot.docs) {
       batch.update(doc.reference, {'isRead': true});
     }
+
+    final otherUserMessagesRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(otherUserId)
+        .collection('chat')
+        .doc(currentUserId)
+        .collection('messages')
+        .where('isRead', isEqualTo: false)
+        .where('receiverId', isEqualTo: currentUserId);
+
+    final otherUserSnapshot = await otherUserMessagesRef.get();
+
+    for (var doc in otherUserSnapshot.docs) {
+      batch.update(doc.reference, {'isRead': true});
+    }
+
+    print("triggered isRead update for both users");
     await batch.commit();
+  }
+
+  Stream<Map<String, dynamic>> getLatestMessageStream(
+      String currentUserId, String recevierId) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUserId)
+        .collection('chat')
+        .doc(recevierId)
+        .collection('messages')
+        .orderBy('sentTime', descending: true)
+        .limit(1)
+        .snapshots()
+        .map((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        return snapshot.docs.first.data();
+      }
+      return {};
+    });
   }
 }

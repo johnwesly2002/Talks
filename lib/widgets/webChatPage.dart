@@ -73,7 +73,7 @@ class _webChatPageState extends State<webChatPage> with WidgetsBindingObserver {
         break;
       case AppLifecycleState.detached:
         FirebaseFirestoreService.updateUserInformation(
-          {'isOnline': true},
+          {'isOnline': false},
         );
         break;
       case AppLifecycleState.inactive:
