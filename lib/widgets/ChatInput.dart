@@ -51,7 +51,7 @@ class _ChatInputState extends State<ChatInput> {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey.shade200,
+          color: themeColor.chatInputContainer(context),
           borderRadius: BorderRadius.circular(30.0),
         ),
         height: 60,
@@ -61,7 +61,7 @@ class _ChatInputState extends State<ChatInput> {
             IconButton(
               onPressed: _sendImage,
               icon: Icon(Icons.attach_file_rounded),
-              color: themeColor.chatInputText,
+              color: themeColor.chatInputText(context),
             ),
             Expanded(
               child: Container(
@@ -72,13 +72,13 @@ class _ChatInputState extends State<ChatInput> {
                   maxLines: 1,
                   controller: chatMessageController,
                   textCapitalization: TextCapitalization.sentences,
-                  style: TextStyle(color: themeColor.attachiconcolor),
+                  style: TextStyle(color: themeColor.attachIconColor(context)),
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 10),
                     hintText: 'Type your message',
                     hintStyle: TextStyle(
-                        fontSize: 15, color: themeColor.chatInputText),
+                        fontSize: 15, color: themeColor.chatInputText(context)),
                     border: InputBorder.none,
                   ),
                 ),

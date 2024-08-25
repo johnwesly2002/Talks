@@ -69,7 +69,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       appBar: AppBar(
         title: Text(
           'Talks',
-          style: ThemTextStyles.HeadingStyles,
+          style: ThemTextStyles.HeadingStyles(context),
         ),
       ),
       body: Stack(
@@ -107,7 +107,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        surfaceTintColor: themeColor.chatInputIconsColor,
+        surfaceTintColor: themeColor.chatInputIconsColor(context),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -121,7 +121,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     },
                     child: Text(
                       'Back',
-                      style: ThemTextStyles.HeadingStyles,
+                      style: ThemTextStyles.HeadingStyles(context),
                     ),
                   )
                 : SizedBox.shrink(),
@@ -130,8 +130,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     width: 80,
                     decoration: BoxDecoration(
                       color: canProceed
-                          ? themeColor.primaryColor
-                          : themeColor.chatInputColor,
+                          ? themeColor.primaryColor(context)
+                          : themeColor.chatInputColor(context),
                       borderRadius: BorderRadius.circular(40),
                     ),
                     child: TextButton(
@@ -145,7 +145,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           : null,
                       child: Text(
                         'Next',
-                        style: ThemTextStyles.RegistrationText,
+                        style: ThemTextStyles.RegistrationText(context),
                       ),
                     ),
                   )
@@ -248,7 +248,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: themeColor.TextFieldColor,
+              color: themeColor.TextFieldColor(context),
             ),
             child: TextFormField(
               controller: _nameController,
@@ -295,7 +295,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: themeColor.TextFieldColor,
+              color: themeColor.TextFieldColor(context),
             ),
             child: TextFormField(
               controller: _emailController,
@@ -342,7 +342,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: themeColor.TextFieldColor,
+              color: themeColor.TextFieldColor(context),
             ),
             child: TextFormField(
               controller: _passwordController,
@@ -403,7 +403,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       SizedBox(height: 10),
                       Text(
                         '${_nameController.text}',
-                        style: ThemTextStyles.HeadingStyles,
+                        style: ThemTextStyles.HeadingStyles(context),
                       ),
                     ],
                   ),
@@ -418,15 +418,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
             width: MediaQuery.of(context).size.width * 0.2,
             decoration: BoxDecoration(
               color: canProceed
-                  ? themeColor.primaryColor
-                  : themeColor.chatInputColor,
+                  ? themeColor.primaryColor(context)
+                  : themeColor.chatInputColor(context),
               borderRadius: BorderRadius.circular(15),
             ),
             child: TextButton(
               onPressed: canProceed ? _registerUser : null,
               child: Text(
                 'Signup',
-                style: ThemTextStyles.RegistrationText,
+                style: ThemTextStyles.RegistrationText(context),
               ),
             ),
           ),
@@ -440,7 +440,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       dotsCount: 5,
       position: _currentPage.toDouble(),
       decorator: DotsDecorator(
-        activeColor: themeColor.primaryColor,
+        activeColor: themeColor.primaryColor(context),
         color: Colors.grey,
         size: const Size.square(8.0),
         activeSize: const Size(18.0, 9.0),

@@ -50,12 +50,6 @@ class _homePageState extends State<homePage> {
             )));
   }
 
-  void _logOut() {
-    FirebaseAuth.instance.signOut();
-    FirebaseFirestoreService.updateUserInformation({'isOnline': false});
-    Navigator.pushReplacementNamed(context, '/loginPage');
-  }
-
   Future<void> _refreshUsersList() async {
     print("refresh triggered");
     await Provider.of<FirebaseProvider>(context, listen: false)
@@ -67,7 +61,7 @@ class _homePageState extends State<homePage> {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Text("Talks", style: ThemTextStyles.HeadingStyles),
+          title: Text("Talks", style: ThemTextStyles.HeadingStyles(context)),
           actions: [
             IconButton(
                 onPressed: () => Navigator.of(context).push(MaterialPageRoute(
@@ -80,28 +74,23 @@ class _homePageState extends State<homePage> {
                     onSelected: (value) {
                       if (value == 'Profile') {
                         _navigateProfilePage();
-                      } else if (value == 'Logout') {
-                        _logOut();
                       }
                     },
                     itemBuilder: (BuildContext context) {
-                      return {'Profile', 'Logout'}.map((String option) {
+                      return {'Profile'}.map((String option) {
                         return PopupMenuItem<String>(
+                          value: option,
                           child: Row(
                             children: [
-                              Icon(
-                                  option == 'Profile'
-                                      ? Icons.person_2_rounded
-                                      : Icons.logout_rounded,
+                              const Icon(Icons.person_2_rounded,
                                   color: Colors.black),
                               const SizedBox(width: 10),
                               Text(
                                 option,
-                                style: ThemTextStyles.MenuOptionsText,
+                                style: ThemTextStyles.MenuOptionsText(context),
                               ),
                             ],
                           ),
-                          value: option,
                         );
                       }).toList();
                     },
@@ -131,28 +120,23 @@ class _homePageState extends State<homePage> {
                   onSelected: (value) {
                     if (value == 'Profile') {
                       _navigateProfilePage();
-                    } else if (value == 'Logout') {
-                      _logOut();
                     }
                   },
                   itemBuilder: (BuildContext context) {
-                    return {'Profile', 'Logout'}.map((String option) {
+                    return {'Profile'}.map((String option) {
                       return PopupMenuItem<String>(
+                        value: option,
                         child: Row(
                           children: [
-                            Icon(
-                                option == 'Profile'
-                                    ? Icons.person_2_rounded
-                                    : Icons.logout_rounded,
+                            const Icon(Icons.person_2_rounded,
                                 color: Colors.black),
                             const SizedBox(width: 10),
                             Text(
                               option,
-                              style: ThemTextStyles.MenuOptionsText,
+                              style: ThemTextStyles.MenuOptionsText(context),
                             ),
                           ],
                         ),
-                        value: option,
                       );
                     }).toList();
                   },
@@ -252,7 +236,7 @@ class _homePageState extends State<homePage> {
                       ),
                       Text(
                         'Select a user to start chatting',
-                        style: ThemTextStyles.WebEmptyChat,
+                        style: ThemTextStyles.WebEmptyChat(context),
                       ),
                     ],
                   ),

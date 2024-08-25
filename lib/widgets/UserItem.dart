@@ -48,7 +48,8 @@ class _UserItemState extends State<UserItem> {
                 backgroundImage: NetworkImage(widget.user.image),
               ),
               const SizedBox(height: 10),
-              Text(widget.user.name, style: ThemTextStyles.homePageUsersText),
+              Text(widget.user.name,
+                  style: ThemTextStyles.homePageUsersText(context)),
             ],
           ),
         ),
@@ -105,12 +106,12 @@ class _UserItemState extends State<UserItem> {
                     padding: const EdgeInsets.only(bottom: 10),
                     child: CircleAvatar(
                       backgroundColor:
-                          widget.user.isOnline ? Colors.green : Colors.red,
+                          widget.user.isOnline ? Colors.green : Colors.orange,
                       radius: 8,
                       child: Center(
                         child: Icon(
-                          widget.user.isOnline ? Icons.check : Icons.close,
-                          size: 10,
+                          widget.user.isOnline ? Icons.check : Icons.link_off,
+                          size: 13,
                           color: Colors.white,
                         ),
                       ),
@@ -120,12 +121,12 @@ class _UserItemState extends State<UserItem> {
               ),
               title: Text(
                 widget.user.name,
-                style: ThemTextStyles.homePageUsersText,
+                style: ThemTextStyles.homePageUsersText(context),
               ),
               subtitle: Text(
                 'Last Seen: ${timeago.format(widget.user.lastActive)}',
                 maxLines: 2,
-                style: ThemTextStyles.lastSeenText,
+                style: ThemTextStyles.lastSeenText(context),
               ),
               trailing: StreamBuilder<int>(
                 stream: unreadMessageCount,
@@ -133,7 +134,7 @@ class _UserItemState extends State<UserItem> {
                   final unreadMessageCount = snapshot.data ?? 0;
                   return unreadMessageCount > 0
                       ? CircleAvatar(
-                          backgroundColor: themeColor.primaryColor,
+                          backgroundColor: themeColor.primaryColor(context),
                           radius: 10,
                           child: Text(
                             '$unreadMessageCount',

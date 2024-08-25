@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:Talks/utils/texts.dart';
 
+// ignore: camel_case_types
 class signupPage extends StatefulWidget {
   const signupPage({Key? key});
 
@@ -15,9 +16,11 @@ class signupPage extends StatefulWidget {
   State<signupPage> createState() => _signupPageState();
 }
 
+// ignore: camel_case_types
 class _signupPageState extends State<signupPage> {
   final _formKey = GlobalKey<FormState>();
 
+  // ignore: non_constant_identifier_names
   final PhoneNumberController = TextEditingController();
   final userNameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -81,7 +84,7 @@ class _signupPageState extends State<signupPage> {
                   controller: PhoneNumberController,
                   hintText: 'PhoneNumber',
                   obscureText: false,
-                  iconName: Icon(Icons.phone),
+                  iconName: const Icon(Icons.phone),
                 ),
                 verticalSpacing(10),
                 LoginTextField(
@@ -111,7 +114,7 @@ class _signupPageState extends State<signupPage> {
                   controller: passwordController,
                   hintText: 'Password',
                   obscureText: true,
-                  iconName: Icon(Icons.lock),
+                  iconName: const Icon(Icons.lock),
                 ),
                 verticalSpacing(10),
                 LoginTextField(
@@ -126,7 +129,7 @@ class _signupPageState extends State<signupPage> {
                   controller: confirmpasswordController,
                   hintText: 'ConfirmPassword',
                   obscureText: true,
-                  iconName: Icon(Icons.lock),
+                  iconName: const Icon(Icons.lock),
                 ),
               ],
             )),
@@ -167,15 +170,15 @@ class _signupPageState extends State<signupPage> {
               children: [
                 Text(HeadingText.signuptoLoginText,
                     style: GoogleFonts.poppins(
-                        textStyle: TextStyle(fontWeight: FontWeight.w300))),
+                        textStyle:
+                            const TextStyle(fontWeight: FontWeight.w300))),
                 GestureDetector(
                   onTap: () async {
                     Navigator.pushReplacementNamed(context, '/loginPage');
-                    print('onTap');
                   },
                   child: Text(
                     HeadingText.signuptoLoginText2,
-                    style: ThemTextStyles.SingupAccountHeadingStyles,
+                    style: ThemTextStyles.SingupAccountHeadingStyles(context),
                   ),
                 )
               ],
@@ -199,7 +202,7 @@ class _signupPageState extends State<signupPage> {
                 if (constraints.maxWidth > 1000) {
                   return Row(
                     children: [
-                      Spacer(
+                      const Spacer(
                         flex: 1,
                       ),
                       Expanded(
@@ -210,11 +213,11 @@ class _signupPageState extends State<signupPage> {
                           ],
                         ),
                       ),
-                      Spacer(
+                      const Spacer(
                         flex: 1,
                       ),
                       Expanded(child: _SignupForm(context)),
-                      Spacer(
+                      const Spacer(
                         flex: 1,
                       ),
                     ],
@@ -226,7 +229,7 @@ class _signupPageState extends State<signupPage> {
                   children: [
                     _SignupHeader(),
                     _SignupForm(context),
-                    SizedBox(height: 32),
+                    const SizedBox(height: 32),
                     _SignupFooter(),
                   ],
                 );

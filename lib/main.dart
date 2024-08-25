@@ -76,12 +76,16 @@ class _ChatAppState extends State<ChatApp> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(builder: (context, themeProvider, child) {
+      final theme = themeProvider.themeData;
+      final splashBackgroundColor = theme.brightness == Brightness.dark
+          ? Color.fromARGB(255, 28, 28, 28)
+          : Colors.white;
       return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: themeProvider.themeData,
+        theme: theme,
         title: 'Talks',
         home: FlutterSplashScreen(
-          backgroundColor: Colors.white,
+          backgroundColor: splashBackgroundColor,
           splashScreenBody: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -100,7 +104,7 @@ class _ChatAppState extends State<ChatApp> {
                       textStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 30,
-                          color: themeColor.primaryColor)),
+                          color: themeColor.primaryColor(context))),
                 )
               ],
             ),

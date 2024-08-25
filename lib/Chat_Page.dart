@@ -1,6 +1,7 @@
 import "package:Talks/modals/chatMessageEntity.dart";
 import "package:Talks/services/firebase_Firestore_service.dart";
 import "package:Talks/services/firebase_Service.dart";
+import "package:Talks/utils/textFeilds_styles.dart";
 import "package:Talks/widgets/chatMessages.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
@@ -95,10 +96,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
                     children: [
                       Text(
                         value.user!.name,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
+                        style: ThemTextStyles.ChatUserName(context),
                       ),
                       Text(value.user!.isOnline ? 'online' : 'offline',
                           style: TextStyle(

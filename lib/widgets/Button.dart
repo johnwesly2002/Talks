@@ -53,7 +53,7 @@ class CustomButton extends StatelessWidget {
                   ),
                   Text(
                     buttonText,
-                    style: ThemTextStyles.ButtonsTextStyle,
+                    style: ThemTextStyles.ButtonsTextStyle(context),
                   ),
                   const Spacer(), // This will push the second icon to the right
                   const Icon(
@@ -62,14 +62,6 @@ class CustomButton extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: Divider(
-              color: Colors.grey.withOpacity(0.3), // Light gray color
-              thickness: 1, // Thin line
-              height: 20, // Space before the next button
             ),
           ),
         ],

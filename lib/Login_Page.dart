@@ -223,7 +223,7 @@ class _LoginPageState extends State<LoginPage>
                   },
                   child: Text(
                     HeadingText.AccountSignupText2,
-                    style: ThemTextStyles.SingupAccountHeadingStyles,
+                    style: ThemTextStyles.SingupAccountHeadingStyles(context),
                   ),
                 )
               ],

@@ -29,7 +29,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: themeColor.TextFieldColor,
+        color: themeColor.TextFieldColor(context),
       ),
       child: TextFormField(
         validator: widget.validator,
@@ -38,7 +38,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
         decoration: InputDecoration(
           icon: widget.iconName,
           hintText: widget.hintText,
-          hintStyle: ThemTextStyles.LoginTextStyles,
+          hintStyle: ThemTextStyles.LoginTextStyles(context),
           border: InputBorder.none,
           suffixIcon: widget.obscureText
               ? IconButton(

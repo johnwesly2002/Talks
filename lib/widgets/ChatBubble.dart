@@ -1,4 +1,5 @@
 import "package:Talks/modals/messagesModal.dart";
+import "package:Talks/utils/themeColor.dart";
 import "package:flutter/material.dart";
 import "package:google_fonts/google_fonts.dart";
 import 'package:timeago/timeago.dart' as timeago;
@@ -54,7 +55,9 @@ class ChatBubble extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           textStyle: TextStyle(
                             fontSize: 15,
-                            color: CurrentUser ? Colors.white : Colors.black,
+                            color: CurrentUser
+                                ? Colors.white
+                                : themeColor.attachIconColor(context),
                           ),
                         ),
                       ),
