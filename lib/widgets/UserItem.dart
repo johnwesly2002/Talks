@@ -30,6 +30,17 @@ class UserItem extends StatefulWidget {
 class _UserItemState extends State<UserItem> {
   bool _isHovered = false;
   String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  ChatUserModal? currentUserDetails;
+
+  void initState() {
+    _currentUserData();
+    super.initState();
+  }
+
+  Future<void> _currentUserData() async {
+    currentUserDetails = await FirebaseProvider.getCurrentUser(currentUserId);
+    debugPrint("currentUser $currentUserDetails");
+  }
 
   void _showProfilePicture(BuildContext context, String imageUrl) {
     showDialog(
@@ -81,7 +92,8 @@ class _UserItemState extends State<UserItem> {
             widget.onUserSelected!(widget.user.uid);
           } else {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => ChatPage(userId: widget.user.uid),
+              builder: (_) => ChatPage(
+                  userId: widget.user.uid, userName: currentUserDetails!.name),
             ));
           }
         },

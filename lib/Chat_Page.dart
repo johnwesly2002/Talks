@@ -1,6 +1,8 @@
 import "package:Talks/modals/chatMessageEntity.dart";
+import "package:Talks/modals/chatUserModal.dart";
 import "package:Talks/services/firebase_Firestore_service.dart";
 import "package:Talks/services/firebase_Service.dart";
+import "package:Talks/services/pushNotification_service.dart";
 import "package:Talks/utils/textFeilds_styles.dart";
 import "package:Talks/widgets/chatMessages.dart";
 import "package:firebase_auth/firebase_auth.dart";
@@ -12,9 +14,10 @@ class ChatPage extends StatefulWidget {
   ChatPage({
     super.key,
     required this.userId,
+    required this.userName,
   });
   final String userId;
-
+  final String? userName;
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
@@ -23,12 +26,14 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   List<ChatMessageEntity> _messages = [];
   late FirebaseProvider _firebaseProvider;
   String CurrentUserId = FirebaseAuth.instance.currentUser!.uid;
+  final notificationService = NotificationsService();
   messageSent(ChatMessageEntity entity) {
     _messages.add(entity);
     print("addMessages${_messages}");
   }
 
   void initState() {
+    notificationService.firebaseNotification(context);
     _firebaseProvider = Provider.of<FirebaseProvider>(context, listen: false);
     _firebaseProvider.getUserMessages(widget.userId);
     _firebaseProvider.getUserById(widget.userId);
@@ -74,6 +79,7 @@ class _ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
             ChatInput(
               onSubmit: messageSent,
               receiverId: widget.userId,
+              user: widget.userName,
             ),
           ],
         ));

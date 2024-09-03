@@ -1,4 +1,5 @@
 import "package:Talks/modals/chatMessageEntity.dart";
+import "package:Talks/modals/chatUserModal.dart";
 import "package:Talks/services/firebase_Firestore_service.dart";
 import "package:Talks/services/firebase_Service.dart";
 import "package:Talks/widgets/chatMessages.dart";
@@ -11,9 +12,10 @@ class webChatPage extends StatefulWidget {
   webChatPage({
     super.key,
     required this.userId,
+    required this.user,
   });
   final String userId;
-
+  final ChatUserModal user;
   @override
   State<webChatPage> createState() => _webChatPageState();
 }
@@ -94,6 +96,7 @@ class _webChatPageState extends State<webChatPage> with WidgetsBindingObserver {
             ChatInput(
               onSubmit: messageSent,
               receiverId: widget.userId,
+              user: widget.user.name,
             ),
           ],
         ));

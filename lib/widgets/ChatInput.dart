@@ -3,23 +3,36 @@ import "dart:typed_data";
 import "package:Talks/modals/chatMessageEntity.dart";
 import "package:Talks/services/MediaService.dart";
 import "package:Talks/services/firebase_Firestore_service.dart";
+import "package:Talks/services/pushNotification_service.dart";
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:Talks/utils/themeColor.dart";
 
 class ChatInput extends StatefulWidget {
   final Function(ChatMessageEntity) onSubmit;
   final String receiverId;
-  ChatInput({super.key, required this.onSubmit, required this.receiverId});
+  final String? user;
+  ChatInput(
+      {super.key,
+      required this.onSubmit,
+      required this.receiverId,
+      required this.user});
   @override
   State<ChatInput> createState() => _ChatInputState();
 }
 
 class _ChatInputState extends State<ChatInput> {
   final chatMessageController = TextEditingController();
+  static final notificationService = NotificationsService();
   Uint8List? file;
   void ImagePicked(String Image) {
     setState(() {});
     Navigator.of(context).pop();
+  }
+
+  void initState() {
+    notificationService.getReceiverToken(widget.receiverId);
+    super.initState();
   }
 
   Future<void> _sendText(BuildContext context) async {
@@ -29,6 +42,10 @@ class _ChatInputState extends State<ChatInput> {
 
       await FirebaseFirestoreService.addTextMessage(
           receiverId: widget.receiverId, content: messageText);
+      await notificationService.sendNotification(
+          body: messageText,
+          senderId: FirebaseAuth.instance.currentUser!.uid,
+          sender: widget.user);
     }
     // FocusScope.of(context).unfocus();
   }
@@ -42,6 +59,10 @@ class _ChatInputState extends State<ChatInput> {
         receiverId: widget.receiverId,
         file: file!,
       );
+      await notificationService.sendNotification(
+          body: 'Image',
+          senderId: FirebaseAuth.instance.currentUser!.uid,
+          sender: widget.user);
     }
   }
 

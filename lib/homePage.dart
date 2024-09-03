@@ -1,17 +1,15 @@
-import 'package:Talks/Chat_Page.dart';
 import 'package:Talks/modals/chatUserModal.dart';
 import 'package:Talks/profile_Page.dart';
-import 'package:Talks/services/firebase_Firestore_service.dart';
 import 'package:Talks/services/firebase_Service.dart';
+import 'package:Talks/services/pushNotification_service.dart';
 import 'package:Talks/usersSearchScreen.dart';
 import 'package:Talks/utils/textFeilds_styles.dart';
 import 'package:Talks/widgets/UserItem.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:Talks/widgets/webChatPage.dart';
+import 'package:Talks/utils/themeColor.dart';
 
 class homePage extends StatefulWidget {
   const homePage({super.key});
@@ -22,8 +20,10 @@ class homePage extends StatefulWidget {
 
 class _homePageState extends State<homePage> {
   final CurrentUserId = FirebaseAuth.instance.currentUser;
+  final notificationService = NotificationsService();
   ChatUserModal? currentUserData;
   String? selectedUser;
+  ChatUserModal? selectedUsers;
   @override
   void initState() {
     _currentUserData();
@@ -82,8 +82,8 @@ class _homePageState extends State<homePage> {
                           value: option,
                           child: Row(
                             children: [
-                              const Icon(Icons.person_2_rounded,
-                                  color: Colors.black),
+                              Icon(Icons.person_2_rounded,
+                                  color: themeColor.attachIconColor(context)),
                               const SizedBox(width: 10),
                               Text(
                                 option,
@@ -192,6 +192,7 @@ class _homePageState extends State<homePage> {
                   separatorBuilder: (context, index) => const SizedBox.shrink(),
                   itemBuilder: (context, index) {
                     final user = value.users[index];
+                    selectedUsers = value.users[index];
                     if (user.uid != FirebaseAuth.instance.currentUser?.uid) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -221,7 +222,7 @@ class _homePageState extends State<homePage> {
         Expanded(
           flex: 7,
           child: selectedUser != null
-              ? webChatPage(userId: selectedUser!)
+              ? webChatPage(userId: selectedUser!, user: selectedUsers!)
               : Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
