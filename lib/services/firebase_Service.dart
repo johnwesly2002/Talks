@@ -151,11 +151,15 @@ class FirebaseProvider extends ChangeNotifier {
     return messages;
   }
 
-  void chatScrollDown() => WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (scrollController.hasClients) {
-          scrollController.jumpTo(scrollController.position.maxScrollExtent);
-        }
-      });
+void chatScrollDown() {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  });
+}
 
   Future<void> SearchUser(String name) async {
     searchUsers = await FirebaseFirestoreService.UserSearch(name);
@@ -260,4 +264,22 @@ class FirebaseProvider extends ChangeNotifier {
       return {};
     });
   }
+
+  Future<List<Messages>> preloadMessages(String receiverId) async {
+  final querySnapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection('chat')
+      .doc(receiverId)
+      .collection('messages')
+      .orderBy('sentTime', descending: false)
+      .limit(50) // Load only the latest 50 messages first
+      .get();
+  
+  final messages = querySnapshot.docs
+      .map((doc) => Messages.fromJson(doc.data()))
+      .toList();
+
+  return messages;
+}
 }
