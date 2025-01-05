@@ -1,3 +1,4 @@
+import 'package:Talks/utils/themeColor.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -20,7 +21,7 @@ class EmptyWidget extends StatelessWidget {
             ),
             Text(
               text,
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: themeColor.chatInputIconsColor(context)),
             ),
           ],
         ),

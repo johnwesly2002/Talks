@@ -30,7 +30,7 @@ class _UserSearchWidgetState extends State<UserSearchWidget> {
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(21),
-          color: themeColor.TextFieldColor,
+          color: themeColor.TextFieldColor(context),
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0),
@@ -43,7 +43,7 @@ class _UserSearchWidgetState extends State<UserSearchWidget> {
             decoration: InputDecoration(
               icon: widget.iconName,
               hintText: widget.hintText,
-              hintStyle: ThemTextStyles.LoginTextStyles,
+              hintStyle: ThemTextStyles.LoginTextStyles(context),
               border: InputBorder.none,
             ),
           ),

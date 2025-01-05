@@ -3,36 +3,51 @@ import "dart:typed_data";
 import "package:Talks/modals/chatMessageEntity.dart";
 import "package:Talks/services/MediaService.dart";
 import "package:Talks/services/firebase_Firestore_service.dart";
+import "package:Talks/services/pushNotification_service.dart";
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:Talks/utils/themeColor.dart";
 
 class ChatInput extends StatefulWidget {
   final Function(ChatMessageEntity) onSubmit;
   final String receiverId;
-  ChatInput({super.key, required this.onSubmit, required this.receiverId});
+  final String? user;
+  ChatInput(
+      {super.key,
+      required this.onSubmit,
+      required this.receiverId,
+      required this.user});
   @override
   State<ChatInput> createState() => _ChatInputState();
 }
 
 class _ChatInputState extends State<ChatInput> {
   final chatMessageController = TextEditingController();
+  static final notificationService = NotificationsService();
   Uint8List? file;
   void ImagePicked(String Image) {
     setState(() {});
     Navigator.of(context).pop();
   }
 
+  void initState() {
+    notificationService.getReceiverToken(widget.receiverId);
+    super.initState();
+  }
+
   Future<void> _sendText(BuildContext context) async {
     if (chatMessageController.text.isNotEmpty) {
-      print("before firebase");
-      await FirebaseFirestoreService.addTextMessage(
-          receiverId: widget.receiverId, content: chatMessageController.text);
-      print("after firebase");
-
+      final messageText = chatMessageController.text;
       chatMessageController.clear();
-      FocusScope.of(context).unfocus();
+
+      await FirebaseFirestoreService.addTextMessage(
+          receiverId: widget.receiverId, content: messageText);
+      await notificationService.sendNotification(
+          body: messageText,
+          senderId: FirebaseAuth.instance.currentUser!.uid,
+          sender: widget.user);
     }
-    FocusScope.of(context).unfocus();
+    // FocusScope.of(context).unfocus();
   }
 
   Future<void> _sendImage() async {
@@ -44,6 +59,10 @@ class _ChatInputState extends State<ChatInput> {
         receiverId: widget.receiverId,
         file: file!,
       );
+      await notificationService.sendNotification(
+          body: 'Image',
+          senderId: FirebaseAuth.instance.currentUser!.uid,
+          sender: widget.user);
     }
   }
 
@@ -53,7 +72,7 @@ class _ChatInputState extends State<ChatInput> {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: themeColor.chatInputColor,
+          color: themeColor.chatInputContainer(context),
           borderRadius: BorderRadius.circular(30.0),
         ),
         height: 60,
@@ -63,7 +82,7 @@ class _ChatInputState extends State<ChatInput> {
             IconButton(
               onPressed: _sendImage,
               icon: Icon(Icons.attach_file_rounded),
-              color: themeColor.chatInputIconsColor,
+              color: themeColor.chatInputText(context),
             ),
             Expanded(
               child: Container(
@@ -74,13 +93,13 @@ class _ChatInputState extends State<ChatInput> {
                   maxLines: 1,
                   controller: chatMessageController,
                   textCapitalization: TextCapitalization.sentences,
-                  style: TextStyle(color: themeColor.chatInputIconsColor),
+                  style: TextStyle(color: themeColor.attachIconColor(context)),
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 10),
                     hintText: 'Type your message',
                     hintStyle: TextStyle(
-                        fontSize: 15, color: themeColor.chatInputIconsColor),
+                        fontSize: 15, color: themeColor.chatInputText(context)),
                     border: InputBorder.none,
                   ),
                 ),

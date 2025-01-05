@@ -14,11 +14,13 @@ class FirebaseFirestoreService {
     required String receiverId,
   }) async {
     final message = Messages(
-        senderId: FirebaseAuth.instance.currentUser!.uid,
-        receiverId: receiverId,
-        content: content,
-        sentTime: DateTime.now(),
-        messageType: MessageType.text);
+      senderId: FirebaseAuth.instance.currentUser!.uid,
+      receiverId: receiverId,
+      content: content,
+      sentTime: DateTime.now(),
+      messageType: MessageType.text,
+      isRead: false,
+    );
     await _addMessageToChat(receiverId, message);
   }
 
@@ -49,14 +51,15 @@ class FirebaseFirestoreService {
     print('File in Firebase service ${file}');
     final image = await FirebaseStorageService.uploadImage(
         file, 'image/chat/${DateTime.now().microsecondsSinceEpoch}');
-    print("image: ${image}");
     if (image != null) {
       final message = Messages(
-          senderId: FirebaseAuth.instance.currentUser!.uid,
-          receiverId: receiverId,
-          content: image,
-          sentTime: DateTime.now(),
-          messageType: MessageType.image);
+        senderId: FirebaseAuth.instance.currentUser!.uid,
+        receiverId: receiverId,
+        content: image,
+        sentTime: DateTime.now(),
+        messageType: MessageType.image,
+        isRead: false,
+      );
       await _addMessageToChat(receiverId, message);
     } else {
       print('Error: imageUrl is null');

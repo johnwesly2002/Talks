@@ -1,4 +1,6 @@
 import 'package:Talks/services/Themeprovider.dart';
+import 'package:Talks/utils/textFeilds_styles.dart';
+import 'package:Talks/widgets/ThemechangeWIdget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,35 +12,65 @@ class ThemeSelector extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        automaticallyImplyLeading: false,
+        title: Text(
           'Talks Themes',
-          style: TextStyle(fontSize: 20),
+          style: ThemTextStyles.HeadingStyles(context),
         ),
       ),
-      body: Column(
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ListTile(
-            title: const Text('Light Theme'),
-            leading: Radio<bool>(
-              value: false,
-              groupValue: isDarkTheme,
-              onChanged: (bool? value) {
-                if (value != null) {
-                  themeProvider.setTheme(ThemeData.light());
-                }
-              },
+          Expanded(
+            child: Column(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    LightThemeSkeleton(),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Radio<bool>(
+                      value: false,
+                      groupValue: isDarkTheme,
+                      onChanged: (bool? value) {
+                        if (value != null) {
+                          themeProvider.setTheme(ThemeData.light());
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          ListTile(
-            title: const Text('Dark Theme'),
-            leading: Radio<bool>(
-              value: true,
-              groupValue: isDarkTheme,
-              onChanged: (bool? value) {
-                if (value != null) {
-                  themeProvider.setTheme(ThemeData.dark());
-                }
-              },
+          Expanded(
+            child: Column(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    DarkThemeSkeleton(),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Radio<bool>(
+                      value: true,
+                      groupValue: isDarkTheme,
+                      onChanged: (bool? value) {
+                        if (value != null) {
+                          themeProvider.setTheme(ThemeData.dark());
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],

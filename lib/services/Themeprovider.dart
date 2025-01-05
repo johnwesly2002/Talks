@@ -14,14 +14,14 @@ class ThemeProvider with ChangeNotifier {
   Future<void> _loadTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isDarkTheme = prefs.getBool('isDarkTheme') ?? false;
-    _themeData = isDarkTheme ? darkTheme : lightTheme;
+    _themeData = isDarkTheme ? ThemeData.dark() : ThemeData.light();
     notifyListeners();
   }
 
   Future<void> setTheme(ThemeData theme) async {
     _themeData = theme;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isDarkTheme', theme == darkTheme);
+    await prefs.setBool('isDarkTheme', theme == ThemeData.dark());
     notifyListeners();
   }
 

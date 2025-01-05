@@ -1,5 +1,6 @@
 import "package:Talks/database/database.dart";
 import "package:Talks/services/firebase_Firestore_service.dart";
+import "package:Talks/services/pushNotification_service.dart";
 import "package:Talks/utils/texts.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
@@ -30,6 +31,8 @@ class _LoginPageState extends State<LoginPage>
 
   late Animation<double> _animation;
 
+  static final _notificationService = NotificationsService();
+
   void initState() {
     super.initState();
     _controller = AnimationController(
@@ -53,8 +56,10 @@ class _LoginPageState extends State<LoginPage>
           email: userNameController.text.trim(),
           password: passwordController.text.trim());
       await FirebaseFirestoreService.updateUserInformation(
-        {'lastActive': DateTime.now()},
+        {'lastActive': DateTime.now(), 'isOnline': true},
       );
+      await _notificationService.requestPermission();
+      await _notificationService.getToken();
       if (response.user != null) {
         Fluttertoast.showToast(
             msg: "Login Successful",
@@ -223,7 +228,7 @@ class _LoginPageState extends State<LoginPage>
                   },
                   child: Text(
                     HeadingText.AccountSignupText2,
-                    style: ThemTextStyles.SingupAccountHeadingStyles,
+                    style: ThemTextStyles.SingupAccountHeadingStyles(context),
                   ),
                 )
               ],

@@ -5,6 +5,7 @@ class ChatUserModal {
   String image;
   DateTime lastActive;
   bool isOnline;
+  int unreadMessages;
   ChatUserModal({
     required this.name,
     required this.image,
@@ -12,15 +13,18 @@ class ChatUserModal {
     required this.uid,
     required this.email,
     this.isOnline = false,
+    this.unreadMessages = 0,
   });
 
   factory ChatUserModal.fromJson(Map<String, dynamic> json) => ChatUserModal(
-      uid: json['uid'],
-      email: json['email'],
-      name: json['name'],
-      image: json['image'],
-      lastActive: json['lastActive'].toDate(),
-      isOnline: json['isOnline'] ?? false);
+        uid: json['uid'],
+        email: json['email'],
+        name: json['name'],
+        image: json['image'],
+        lastActive: json['lastActive'].toDate(),
+        isOnline: json['isOnline'] ?? false,
+        unreadMessages: json['unreadMessages'] ?? 0,
+      );
 
   Map<String, dynamic> toJson() => {
         'uid': uid,
@@ -29,5 +33,6 @@ class ChatUserModal {
         'image': image,
         'lastActive': lastActive,
         'isOnline': isOnline,
+        'unreadMessages': unreadMessages,
       };
 }

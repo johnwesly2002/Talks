@@ -22,7 +22,7 @@ class _UserSearchScreenState extends State<UserSearchScreen> {
       appBar: AppBar(
         title: Text(
           'Talks Search',
-          style: ThemTextStyles.userSearchText,
+          style: ThemTextStyles.userSearchText(context),
         ),
       ),
       body: Column(

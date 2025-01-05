@@ -5,9 +5,12 @@ import 'package:Talks/homePage.dart';
 import 'package:Talks/onBoardingScreen.dart';
 import 'package:Talks/services/Themeprovider.dart';
 import 'package:Talks/services/auth_Service.dart';
+import 'package:Talks/services/firebase_Firestore_service.dart';
 import 'package:Talks/services/firebase_Service.dart';
+import 'package:Talks/services/pushNotification_service.dart';
 import 'package:Talks/utils/themeColor.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:Talks/Login_Page.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,13 +18,21 @@ import 'package:provider/provider.dart';
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+Future<void> _backgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
   final themeProvider = ThemeProvider();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseMessaging.instance.getInitialMessage();
+  FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => themeProvider),
@@ -41,9 +52,11 @@ class _ChatAppState extends State<ChatApp> {
   bool _isFirstRun = true;
   bool _isLoggedIn = false;
   ThemeData _themeData = ThemeData.light();
+  final notificationService = NotificationsService();
   @override
   void initState() {
     super.initState();
+
     _checkFirstRun();
     _checkLoginStatus();
   }
@@ -60,6 +73,9 @@ class _ChatAppState extends State<ChatApp> {
     AuthService authService = Provider.of<AuthService>(context, listen: false);
     setState(() {
       _isLoggedIn = authService.isLoggedIn();
+      FirebaseFirestoreService.updateUserInformation(
+        {'isOnline': true},
+      );
     });
   }
 
@@ -72,12 +88,16 @@ class _ChatAppState extends State<ChatApp> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(builder: (context, themeProvider, child) {
+      final theme = themeProvider.themeData;
+      final splashBackgroundColor = theme.brightness == Brightness.dark
+          ? Color.fromARGB(255, 28, 28, 28)
+          : Colors.white;
       return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: themeProvider.themeData,
+        theme: theme,
         title: 'Talks',
         home: FlutterSplashScreen(
-          backgroundColor: Colors.white,
+          backgroundColor: splashBackgroundColor,
           splashScreenBody: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -96,7 +116,7 @@ class _ChatAppState extends State<ChatApp> {
                       textStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 30,
-                          color: themeColor.primaryColor)),
+                          color: themeColor.primaryColor(context))),
                 )
               ],
             ),
